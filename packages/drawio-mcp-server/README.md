@@ -9,12 +9,16 @@ Let's do some Vibe Diagramming with the most wide-spread diagramming tool called
 
 ## Key Highlights
 
-- Enable Draw.io MCP in IFrames ![v2.1.0](https://img.shields.io/badge/v2.1.0-blue)
-- AWS, GCP, Azure, Cisco19, and CiscoSafe stencils auto-discovered at runtime from drawio's sidebar ![v2.1.0](https://img.shields.io/badge/v2.1.0-blue)
-- Multi-document targeting with `list-documents` and `target_document` selectors for multi-tab workflows ![v2.1.0](https://img.shields.io/badge/v2.1.0-blue)
-- Multi-page targeting with required `target_page` selectors for page-scoped tools ![v2.1.0](https://img.shields.io/badge/v2.1.0-blue)
-- Per-document FIFO serialization for live operations, so multiple agents can work on different files safely ![v2.1.0](https://img.shields.io/badge/v2.1.0-blue)
-- Page management tools: `list-pages`, `get-current-page`, `create-page`, `copy-page`, `rename-page` ![v2.1.0](https://img.shields.io/badge/v2.1.0-blue)
+- Claude Code plugin: `/plugin marketplace add lgazo/drawio-mcp-server` then `/plugin install drawio`, with `/drawio-open` and `/drawio-status` slash commands ![v2.3.0](https://img.shields.io/badge/v2.3.0-blue)
+- `npx drawio-mcp-server install <host>` writes the MCP config for `claude-code`, `claude-desktop`, `codex`, `zed`, `opencode`, or `all` ![v2.3.0](https://img.shields.io/badge/v2.3.0-blue)
+- Document persistence tools: `set-document-title` and `save-document` ![v2.3.0](https://img.shields.io/badge/v2.3.0-blue)
+- Draw.io library API version compatibility mechanism ![v2.2.0](https://img.shields.io/badge/v2.2.0-blue)
+- Enable Draw.io MCP in IFrames
+- AWS, GCP, Azure, Cisco19, and CiscoSafe stencils auto-discovered at runtime from drawio's sidebar
+- Multi-document targeting with `list-documents` and `target_document` selectors for multi-tab workflows
+- Multi-page targeting with required `target_page` selectors for page-scoped tools
+- Per-document FIFO serialization for live operations, so multiple agents can work on different files safely
+- Page management tools: `list-pages`, `get-current-page`, `create-page`, `copy-page`, `rename-page`
 - Import, embed, or expand [Mermaid](https://mermaid.js.org/) diagrams ![v2.1.0](https://img.shields.io/badge/v2.1.0-blue)
 - Firefox support is back, TLS mode is necessary ![v2.1.0](https://img.shields.io/badge/v2.1.0-blue)
 - Server supports TLS mode and optionally generates self-signed certificates ![v2.1.0](https://img.shields.io/badge/v2.1.0-blue)
@@ -58,10 +62,15 @@ No additional requirements - runs out of the box with `--editor` flag.
 
 ### 1. Configure your MCP host
 
-Add the server to your MCP client configuration:
+**Fastest path:**
+
+- **Claude Code:** `/plugin marketplace add lgazo/drawio-mcp-server` then `/plugin install drawio`.
+- **Any other host:** `npx drawio-mcp-server install <host>` where `<host>` is `claude-code`, `claude-desktop`, `codex`, `zed`, `opencode`, or `all`.
+
+See [docs/PLUGINS.md](./docs/PLUGINS.md) for the full reference, flags, and uninstall, and [docs/release.md](./docs/release.md) for how releases are cut.
 
 <details>
-  <summary>Claude Desktop</summary>
+  <summary>Manual install (JSON snippet, Claude Desktop example)</summary>
 
 Edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
@@ -75,63 +84,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
   }
 }
 ```
-</details>
 
-<details>
-  <summary>Claude Code</summary>
-
-```sh
-claude mcp add-json drawio '{"type":"stdio","command":"npx","args":["-y","drawio-mcp-server","--editor"]}'
-```
-</details>
-
-<details>
-  <summary>Zed</summary>
-
-Add to `~/.config/zed/settings.json`:
-
-```json
-{
-  "context_servers": {
-    "drawio": {
-      "command": "npx",
-      "args": ["-y", "drawio-mcp-server", "--editor"],
-      "env": {}
-    }
-  }
-}
-```
-</details>
-
-<details>
-  <summary>Codex</summary>
-
-Edit `~/.codex/config.toml`:
-
-```toml
-[mcp_servers.drawio]
-command = "npx"
-args = ["-y", "drawio-mcp-server", "--editor"]
-```
-</details>
-
-<details>
-  <summary>OpenCode</summary>
-
-Add to `opencode.json` in your project root or `~/.config/opencode/opencode.json`:
-
-```jsonc
-{
-  "$schema": "https://opencode.ai/config.json",
-  "mcp": {
-    "drawio": {
-      "type": "local",
-      "command": ["npx", "-y", "drawio-mcp-server", "--editor"],
-      "enabled": true
-    }
-  }
-}
-```
 </details>
 
 For other MCP clients and detailed configuration (including pnpm options), see [Configuration](./CONFIG.md).
